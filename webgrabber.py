@@ -43,12 +43,20 @@ with open(args.list) as list:
         # http screenshot
         if (args.verbose):
             print(f"Making HTTP request to http://{domain}...")
-        driver.get(f"http://{domain}/")
+        try:
+            driver.get(f"http://{domain}/")
+        except Exception as e:
+            if (args.verbose):
+                print(e)
         driver.save_screenshot(f"{args.out}/{domain}-HTTP.png")
         # http screenshot
         if (args.verbose):
             print(f"Making HTTPS request to https://{domain}...")
-        driver.get(f"https://{domain}/")
+        try:
+            driver.get(f"https://{domain}/")
+        except Exception as e:
+            if (args.verbose):
+                print(e)
         driver.save_screenshot(f"{args.out}/{domain}-HTTPS.png")
 
 
