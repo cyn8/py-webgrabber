@@ -1,5 +1,6 @@
 import os
 import sys
+from time import sleep
 import argparse
 from selenium import webdriver  
 from selenium.webdriver.chrome.options import Options
@@ -13,6 +14,7 @@ parser.add_argument("--driver", "-d", help="/path/to/chromedriver", required=Tru
 parser.add_argument("--browser", "-b", help="/path/to/chrome", required=True)
 parser.add_argument("--out", "-o", help='output directory (default output/, will be created if it does not exist)')
 parser.add_argument("--verbose", "-v", help="enable verbose output")
+parser.add_argument("--wait", "-w", help='time to wait for page load in seconds (default 5)')
 args = parser.parse_args()
 
 CHROME_PATH = args.browser
@@ -21,6 +23,11 @@ WINDOW_SIZE = "1920,1080"
 
 if not args.out:
     args.out = "output"
+
+if args.wait:
+    args.wait = int(args.wait)
+else:
+    args.wait = 5
 
 chrome_options = Options()  
 chrome_options.add_argument("--headless")  
@@ -45,6 +52,7 @@ with open(args.list) as list:
             print(f"Making HTTP request to http://{domain}...")
         try:
             driver.get(f"http://{domain}/")
+            sleep(args.wait)
         except Exception as e:
             if (args.verbose):
                 print(e)
@@ -54,6 +62,7 @@ with open(args.list) as list:
             print(f"Making HTTPS request to https://{domain}...")
         try:
             driver.get(f"https://{domain}/")
+            sleep(args.wait)
         except Exception as e:
             if (args.verbose):
                 print(e)
